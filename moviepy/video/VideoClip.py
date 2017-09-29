@@ -75,7 +75,7 @@ class VideoClip(Clip):
     """
 
     def __init__(self, make_frame=None, ismask=False, duration=None,
-                 has_constant_size=True):
+                 has_constant_size=True, blend_effect = None):
         Clip.__init__(self)
         self.mask = None
         self.audio = None
@@ -86,6 +86,7 @@ class VideoClip(Clip):
             self.size = self.get_frame(0).shape[:2][::-1]
         self.ismask = ismask
         self.has_constant_size=has_constant_size
+        self.blend_effect = blend_effect
         if duration is not None:
             self.duration = duration
             self.end = duration
@@ -572,7 +573,7 @@ class VideoClip(Clip):
 
         pos = map(int, pos)
 
-        return blit(img, picture, pos, mask=mask, ismask=self.ismask)
+        return blit(img, picture, pos, blend_effect = self.blend_effect, mask=mask, ismask=self.ismask)
 
     def add_mask(self):
         """Add a mask VideoClip to the VideoClip.
