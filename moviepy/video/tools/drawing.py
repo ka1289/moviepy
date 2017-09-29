@@ -4,14 +4,24 @@ methods that are difficult to do with the existing Python libraries.
 """
 
 import numpy as np
+import matplotlib.pyplot as plt
 
-def blit(im1, im2, pos=None, mask=None, ismask=False):
+def blit(im1, im2, pos=None, blend_effect=None, mask=None, ismask=False):
     """ Blit an image over another.
     
     Blits ``im1`` on ``im2`` as position ``pos=(x,y)``, using the
     ``mask`` if provided. If ``im1`` and ``im2`` are mask pictures
     (2D float arrays) then ``ismask`` must be ``True``.
     """
+    # print('hey hey,',np.unique(im1), np.unique(im2), np.unique(mask))
+    # plt.imshow(im1)
+    # plt.title('im1')
+    # plt.show()
+
+    # plt.imshow(im2)
+    # plt.title('im2')
+    # plt.show()
+
     if pos is None:
         pos = [0, 0]
 
@@ -41,10 +51,21 @@ def blit(im1, im2, pos=None, mask=None, ismask=False):
         if len(im1.shape) == 3:
             mask = np.dstack(3 * [mask])
         blit_region = new_im2[yp1:yp2, xp1:xp2]
-        new_im2[yp1:yp2, xp1:xp2] = (
-            1.0 * mask * blitted + (1.0 - mask) * blit_region)
+        if blend_effect == "multiply":
+          new_im2[yp1:yp2, xp1:xp2] = np.uint8((
+              1.0 * mask * blitted/255.0 * blit_region/255.0 + (1.0 - mask) * blit_region/255.0)*255)
+        elif blend_effect == "add":
+          new_im2[yp1:yp2, xp1:xp2] = (
+              1.0 * mask * blitted + blit_region)
+        else:
+          new_im2[yp1:yp2, xp1:xp2] = (
+              1.0 * mask * blitted + (1.0 - mask) * blit_region)
     else:
         new_im2[yp1:yp2, xp1:xp2] = blitted
+
+    # plt.imshow(np.uint8(new_im2))
+    # plt.title('im3')
+    # plt.show()
 
     return new_im2.astype('uint8') if (not ismask) else new_im2
 
