@@ -4,7 +4,7 @@ methods that are difficult to do with the existing Python libraries.
 """
 
 import numpy as np
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 def blit(im1, im2, pos=None, blend_effect=None, mask=None, ismask=False):
     """ Blit an image over another.
