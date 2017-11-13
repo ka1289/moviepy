@@ -124,6 +124,27 @@ If you opt to run the test suite manually, you can install the dependencies via:
     $ (sudo) pip install moviepy[test]
 
 
+New Additions
+-------------
+
+This is done by integrating Blend_modes_ into Moviepy
+
+.. code:: python
+
+    clip1 = ImageClip("path_to_img", duration=5)
+    
+    clip2 = ImageClip("path_to_layer", duration=5)
+    
+    clip2.blend_effect = "multiply"
+    
+    clip = CompositeVideoClip([clip1, clip2])
+    
+    clip.write_videofile("result.mov", codec = "libx264", fps = 25)
+    
+   
+Above code will perform multiply blend.
+
+
 Contribute
 ----------
 
@@ -147,6 +168,8 @@ Maintainers
 .. _gallery: http://zulko.github.io/moviepy/gallery.html
 .. _documentation: http://zulko.github.io/moviepy/
 .. _`download MoviePy`: https://github.com/Zulko/moviepy
+.. _Blend_modes : https://github.com/flrs/blend_modes
+
 
 .. Websites, Platforms
 .. _Reddit: http://www.reddit.com/r/moviepy/
