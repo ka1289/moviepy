@@ -109,9 +109,9 @@ def resize(clip, newsize=None, height=None, width=None, apply_to_mask=True):
                 fun = lambda gf,t: (1.0*resizer((255 * gf(t)).astype('uint8'),
                                                  newsize2(t))/255)
             else:
-
+                
                 fun = lambda gf,t: resizer(gf(t).astype('uint8'),
-                                      newsize2(t)) if isinstance(gf(t), int) else 1.0*resizer((gf(t)*255).astype('uint8'),newsize2(t))/255
+                                      newsize2(t)) if len(gf(t).shape) == 3 else 1.0*resizer((gf(t)*255).astype('uint8'),newsize2(t))/255
 
             return clip.fl(fun, keep_duration=True,
                            apply_to=(["mask"] if apply_to_mask else []))
