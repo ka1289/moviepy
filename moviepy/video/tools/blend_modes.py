@@ -8,7 +8,7 @@ def make_rgba_image(f, image, layer, opacity):
     Using this decorator to manipulate frames to have 4 channels
     '''
     # opacity = 1
-    print('opacity', opacity)
+    # print('opacity', opacity)
     image_org = image.copy()
     layer_org = layer.copy()
     if image.shape[2] < 4:
