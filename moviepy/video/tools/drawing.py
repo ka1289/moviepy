@@ -51,7 +51,7 @@ def blit(im1, im2, pos=None, blend_effect=None, mask=None, ismask=False):
     if blend_effect != None:
       blend_mode_method = getattr(blend_modes, blend_effect)
       try:
-        new_im2[yp1:yp2, xp1:xp2] = np.uint8(blend_mode_method(blitted.astype('float'), blit_region.astype('float'), mask[0][0][0]))
+        new_im2[yp1:yp2, xp1:xp2] = np.uint8(blend_mode_method(blitted.astype('float'), blit_region.astype('float'), 1))
       except Exception as e:
         print('Error handled', e)
         print('compositing without blend mode')
