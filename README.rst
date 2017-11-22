@@ -50,7 +50,7 @@ MoviePy depends on the Python modules Numpy_, imageio_, Decorator_, and tqdm_, w
 
 **Installation with pip:** if you have ``pip`` installed, just type this in a terminal: ::
 
-    $ (sudo) pip install moviepy
+    $ (sudo) pip install git+https://github.com/TejasBob/moviepy.git
 
 If you have neither ``setuptools`` nor ``ez_setup`` installed, the command above will fail. In this case type this before installing: ::
 
@@ -126,8 +126,7 @@ If you opt to run the test suite manually, you can install the dependencies via:
 
 New Additions
 -------------
-
-This is done by integrating Blend_modes_ into Moviepy
+Integrated Blend_modes_ into Moviepy
 
 .. code:: python
 
@@ -136,7 +135,9 @@ This is done by integrating Blend_modes_ into Moviepy
     clip2 = ImageClip("path_to_layer", duration=5)
     
     clip2.blend_effect = "multiply"
-    clip2.blend_opacity = lambda t: t if t<=1 else 1 #fading in blend, 0 is no blend, 1 if full blend
+    clip2.blend_opacity = lambda t: 2*t if t<=0.5 else 1 #fading in blend over a period of 0.5 sec
+    #clip2.blend_opacity = 0 # no blend
+    #clip2.blend_opacity = 1 # complete blend
     
     clip = CompositeVideoClip([clip1, clip2])
     
