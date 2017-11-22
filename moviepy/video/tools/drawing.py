@@ -7,7 +7,7 @@ import numpy as np
 from . import blend_modes
 
 
-def blit(im1, im2, pos=None, blend_effect=None, mask=None, ismask=False):
+def blit(im1, im2, pos=None, blend_effect=None, blend_opacity=None, mask=None, ismask=False):
   """ Blit an image over another.
 
   Blits ``im1`` on ``im2`` as position ``pos=(x,y)``, using the
@@ -17,7 +17,7 @@ def blit(im1, im2, pos=None, blend_effect=None, mask=None, ismask=False):
   blit_region :  color layer
   blitted     :  background image
   """
-
+  # print('blend_opacity', blend_opacity)
   if pos is None:
     pos = [0, 0]
 
@@ -51,7 +51,7 @@ def blit(im1, im2, pos=None, blend_effect=None, mask=None, ismask=False):
     if blend_effect != None:
       blend_mode_method = getattr(blend_modes, blend_effect)
       try:
-        new_im2[yp1:yp2, xp1:xp2] = np.uint8(blend_mode_method(blitted.astype('float'), blit_region.astype('float'), 1))
+        new_im2[yp1:yp2, xp1:xp2] = np.uint8(blend_mode_method(blit_region.astype('float'), blitted.astype('float'), blend_opacity))
       except Exception as e:
         print('Error handled', e)
         print('compositing without blend mode')
