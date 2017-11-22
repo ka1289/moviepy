@@ -136,6 +136,7 @@ This is done by integrating Blend_modes_ into Moviepy
     clip2 = ImageClip("path_to_layer", duration=5)
     
     clip2.blend_effect = "multiply"
+    clip2.blend_opacity = lambda t: t if t<=1 else 1 #fading in blend, 0 is no blend, 1 if full blend
     
     clip = CompositeVideoClip([clip1, clip2])
     
