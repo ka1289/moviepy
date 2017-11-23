@@ -59,7 +59,17 @@ def blit(im1, im2, pos=None, blend_effect=None, blend_opacity=None, mask=None, i
     else:
       new_im2[yp1:yp2, xp1:xp2] = (1.0 * mask * blitted + (1.0 - mask) * blit_region)
   else:
-    new_im2[yp1:yp2, xp1:xp2] = blitted
+    # new_im2[yp1:yp2, xp1:xp2] = blitted
+    blit_region = new_im2[yp1:yp2, xp1:xp2]
+    if blend_effect != None:
+      blend_mode_method = getattr(blend_modes, blend_effect)
+      try:
+        new_im2[yp1:yp2, xp1:xp2] = np.uint8(blend_mode_method(blit_region.astype('float'), blitted.astype('float'), blend_opacity))
+      except Exception as e:
+        print('Error handled', e)
+        print('compositing without blend mode')
+        # new_im2[yp1:yp2, xp1:xp2] = (1.0 * mask * blitted + (1.0 - mask) * blit_region)
+        new_im2[yp1:yp2, xp1:xp2] = blitted
 
   return new_im2.astype('uint8') if (not ismask) else new_im2
 
