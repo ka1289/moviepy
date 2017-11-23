@@ -75,7 +75,7 @@ class VideoClip(Clip):
     """
 
     def __init__(self, make_frame=None, ismask=False, duration=None,
-                 has_constant_size=True, blend_effect = None, blend_opacity = None):
+                 has_constant_size=True, blend_effect = None, blend_opacity = 1):
         Clip.__init__(self)
         self.mask = None
         self.audio = None
@@ -87,13 +87,7 @@ class VideoClip(Clip):
         self.ismask = ismask
         self.has_constant_size=has_constant_size
         self.blend_effect = blend_effect
-        if self.blend_effect is not None:
-          if blend_opacity is not None:
-            self.blend_opacity = blend_opacity
-          else:
-            self.blend_opacity = 1
-        else:
-          self.blend_opacity = blend_opacity
+        self.blend_opacity = blend_opacity
         if duration is not None:
             self.duration = duration
             self.end = duration
