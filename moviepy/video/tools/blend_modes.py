@@ -256,17 +256,19 @@ def addition(img_in, img_layer, opacity):
     img_in /= 255.0
     img_layer /= 255.0
 
-    ratio = _compose_alpha(img_in, img_layer, opacity)
+    # ratio = _compose_alpha(img_in, img_layer, opacity)
+    ratio_val = _compose_alpha_addition(img_in[:, :, 3][0][0], img_layer[:, :, 3][0][0], opacity)
+    ratio_rs = np.full((img_in.shape[0], img_in.shape[1], 3), ratio_val)
 
     comp = img_in[:, :, :3] + img_layer[:, :, :3]
 
     # ratio_rs = np.reshape(np.repeat(ratio, 3), [comp.shape[0], comp.shape[1], comp.shape[2]])
-    ratio_rs = np.dstack((ratio, ratio, ratio))
+    # ratio_rs = np.dstack((ratio, ratio, ratio))
     img_out = np.clip(comp * ratio_rs + img_in[:, :, :3] * (1.0 - ratio_rs), 0.0, 1.0)
     # img_out = np.nan_to_num(np.dstack((img_out, img_in[:, :, 3])))  # add alpha channel and replace nans
-    img_out = np.dstack((img_out, img_in[:, :, 3]))
-    img_out[img_out == np.nan] = 0
-    img_out[img_out == np.inf] = 1
+    # img_out = np.dstack((img_out, img_in[:, :, 3]))
+    # img_out[img_out == np.nan] = 0
+    # img_out[img_out == np.inf] = 1
     return img_out * 255.0
 
 
@@ -652,4 +654,15 @@ def _compose_alpha(img_in, img_layer, opacity):
     np.seterr(divide='ignore', invalid='ignore')
     ratio = comp_alpha / new_alpha
     ratio[ratio == np.NAN] = 0.0
+    return ratio
+
+
+def _compose_alpha_addition(img_in_mask, img_layer_mask, opacity):
+    """
+    Calculate alpha composition ratio between two images.
+    """
+
+    comp_alpha = np.minimum(img_in_mask, img_layer_mask) * opacity
+    new_alpha = img_in_mask + (1.0 - img_in_mask) * comp_alpha
+    ratio = comp_alpha / new_alpha
     return ratio
