@@ -575,7 +575,7 @@ class VideoClip(Clip):
         pos = map(int, pos)
 
         if hasattr(self.blend_opacity, "__call__"):
-          blend_opacity = self.blend_opacity(t)
+          blend_opacity = self.blend_opacity(ct)
         else:
           blend_opacity = self.blend_opacity
 
