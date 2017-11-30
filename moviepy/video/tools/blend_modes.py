@@ -29,29 +29,37 @@ def make_rgba_image(f, image, layer, opacity):
 
 
 @make_rgba_image
+def overlay(img_in, img_layer, opacity):
+    """
+    Apply overlay blend effect on input image
+    """
+
+    # sanity check of inputs
+    assert img_in.dtype == np.float, 'Input variable img_in should be of numpy.float type.'
+    assert img_layer.dtype == np.float, 'Input variable img_layer should be of numpy.float type.'
+    assert img_in.shape[2] == 4, 'Input variable img_in should be of shape [:, :,4].'
+    assert img_layer.shape[2] == 4, 'Input variable img_layer should be of shape [:, :,4].'
+    assert 0.0 <= opacity <= 1.0, 'Opacity needs to be between 0.0 and 1.0.'
+
+    img_in /= 255.0
+    img_layer /= 255.0
+
+    ratio = _compose_alpha(img_in, img_layer, opacity)
+
+    comp = img_in[:,:,:3] * (img_in[:,:,:3] + (2 * img_layer[:,:,:3]) * (1 - img_in[:,:,:3]))
+
+    ratio_rs = np.reshape(np.repeat(ratio, 3), [comp.shape[0], comp.shape[1], comp.shape[2]])
+    img_out = comp * ratio_rs + img_in[:, :, :3] * (1.0 - ratio_rs)
+    img_out = np.nan_to_num(np.dstack((img_out, img_in[:, :, 3])))  # add alpha channel and replace nans
+
+    return img_out * 255.0
+
+
+
+@make_rgba_image
 def soft_light(img_in, img_layer, opacity):
     """
     Apply soft light blending mode of a layer on an image.
-
-    Find more information on `Wikipedia <https://en.wikipedia.org/w/index.php?title=Blend_modes&oldid=747749280#Soft_Light>`__.
-
-    Example::
-
-        import img_filters_c, cv2, numpy
-        img_in = cv2.imread('./orig.png', -1).astype(float)
-        img_layer = cv2.imread('./layer.png', -1).astype(float)
-        img_out = soft_light(img_in,img_layer,0.5)
-        cv2.imshow('window', img_out.astype(numpy.uint8))
-        cv2.waitKey()
-
-    :param img_in: Image to be blended upon
-    :type img_in: 3-dimensional numpy array of floats (r/g/b/a) in range 0-255.0
-    :param img_layer: Layer to be blended with image
-    :type img_layer: 3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0
-    :param opacity: Desired opacity of layer for blending
-    :type opacity: float
-    :return: Blended image
-    :rtype: 3-dimensional numpy array of floats (r/g/b/a) in range 0.0-255.0
     """
 
     # sanity check of inputs
