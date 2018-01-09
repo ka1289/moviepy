@@ -102,16 +102,16 @@ def resize(clip, newsize=None, height=None, width=None, apply_to_mask=True):
 
         if hasattr(newsize, "__call__"):
 
-            newsize2 = lambda t : trans_newsize(newsize(t))
-            
+            def newsize2(t): return trans_newsize(newsize(t))
+
             if clip.ismask:
 
-                fun = lambda gf,t: (1.0*resizer((255 * gf(t)).astype('uint8'),
-                                                 newsize2(t))/255)
+                def fun(gf, t): return (1.0 * resizer((255 * gf(t)).astype('uint8'),
+                                                      newsize2(t)) / 255)
             else:
-                
-                fun = lambda gf,t: resizer(gf(t).astype('uint8'),
-                                      newsize2(t)) if len(gf(t).shape) == 3 else 1.0*resizer((gf(t)*255).astype('uint8'),newsize2(t))/255
+
+                def fun(gf, t): return resizer(gf(t).astype('uint8'),
+                                               newsize2(t)) if len(gf(t).shape) == 3 else 1.0 * resizer((gf(t) * 255).astype('uint8'), newsize2(t)) / 255
 
             return clip.fl(fun, keep_duration=True,
                            apply_to=(["mask"] if apply_to_mask else []))
@@ -144,7 +144,7 @@ def resize(clip, newsize=None, height=None, width=None, apply_to_mask=True):
         def fl(pic): return 1.0 * resizer((255 * pic).astype('uint8'), newsize) / 255.0
 
     else:
-        def fl(pic): return resizer(pic.astype('uint8'), newsize)
+        def fl(pic): return resizer(pic.astype('uint8'), newsize) if len(pic.shape) == 3 else 1.0 * resizer((255 * pic).astype('uint8'), newsize) / 255.0
 
     newclip = clip.fl_image(fl)
 
