@@ -54,6 +54,37 @@ def overlay(img_in, img_layer, opacity):
 
     return img_out * 255.0
 
+@make_rgba_image
+def burn(img_in, img_layer, opacity):
+    """
+    Apply burn blend effect on input image
+    """
+
+    # sanity check of inputs
+    assert img_in.dtype == np.float, 'Input variable img_in should be of numpy.float type.'
+    assert img_layer.dtype == np.float, 'Input variable img_layer should be of numpy.float type.'
+    assert img_in.shape[2] == 4, 'Input variable img_in should be of shape [:, :,4].'
+    assert img_layer.shape[2] == 4, 'Input variable img_layer should be of shape [:, :,4].'
+    assert 0.0 <= opacity <= 1.0, 'Opacity needs to be between 0.0 and 1.0.'
+
+    img_in /= 255.0
+    img_layer /= 255.0
+    
+    ratio = _compose_alpha(img_in, img_layer, opacity)
+    
+    comp = 1 - (1-img_in[:,:,:3])/img_layer[:,:,:3]
+
+    # comp[comp <0] = 0 
+
+    # comp[comp >1] = 1
+    comp = np.clip(comp,0,1)
+    
+    ratio_rs = np.reshape(np.repeat(ratio, 3), [comp.shape[0], comp.shape[1], comp.shape[2]])
+    img_out = comp * ratio_rs + img_in[:, :, :3] * (1.0 - ratio_rs)
+    img_out = np.nan_to_num(np.dstack((img_out, img_in[:, :, 3])))  # add alpha channel and replace nans
+
+    return img_out * 255.0
+
 
 
 @make_rgba_image
