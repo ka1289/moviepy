@@ -357,6 +357,7 @@ class Clip:
     @convert_to_seconds(['t_start', 't_end'])
     @apply_to_mask
     @apply_to_audio
+    @outplace
     def subclip(self, t_start=0, t_end=None):
         """
         Returns a clip playing the content of the current clip
