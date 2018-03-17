@@ -331,6 +331,7 @@ class VideoClip(Clip):
             os.remove(audiofile)
 
         verbose_print(verbose, "[MoviePy] >>>> Video ready: %s \n\n"%filename)
+        self.close()
 
     @requires_duration
     @use_clip_fps_by_default
