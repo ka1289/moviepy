@@ -378,7 +378,8 @@ class Clip:
         subclips of ``mask`` and ``audio`` the original clip, if
         they exist.
         """
-
+            
+        # print('subclip called')
         if t_start < 0:
             # Make this more Python-like, a negative value means to move
             # backward from the end of the clip
