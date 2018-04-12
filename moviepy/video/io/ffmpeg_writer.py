@@ -207,7 +207,7 @@ def ffmpeg_write_video(clip, filename, fps, codec="libx264", bitrate=None,
         logfile = None
 
     verbose_print(verbose, "[MoviePy] Writing video %s\n"%filename)
-    with FFMPEG_VideoWriter(filename, clip.size, fps, codec = codec,
+    with FFMPEG_VideoWriter(filename, clip.size, fps, codec = codec, withmask=withmask,
                                 preset=preset, bitrate=bitrate, logfile=logfile,
                                 audiofile=audiofile, threads=threads,
                                 ffmpeg_params=ffmpeg_params) as writer:

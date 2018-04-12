@@ -136,7 +136,7 @@ class VideoClip(Clip):
     @convert_masks_to_RGB
     def write_videofile(self, filename, fps=None, codec=None,
                         bitrate=None, audio=True, audio_fps=44100,
-                        preset="medium",
+                        preset="medium", withmask=False,
                         audio_nbytes=4, audio_codec=None,
                         audio_bitrate=None, audio_bufsize=2000,
                         temp_audiofile=None,
@@ -319,7 +319,7 @@ class VideoClip(Clip):
                                        verbose=verbose, progress_bar=progress_bar)
 
         ffmpeg_write_video(self, filename, fps, codec,
-                           bitrate=bitrate,
+                           bitrate=bitrate, withmask=withmask,
                            preset=preset,
                            write_logfile=write_logfile,
                            audiofile=audiofile,
