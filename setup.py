@@ -66,6 +66,7 @@ requires = [
     'imageio>=2.1.2,<3.0',
     'tqdm>=4.11.2,<5.0',
     'numpy',
+    'requests>=2.8.1,<3.0'
     ]
 
 optional_reqs = [
@@ -109,7 +110,7 @@ setup(
     long_description=readme,
     url='https://zulko.github.io/moviepy/',
     license='MIT License',
-    classifiers=(
+    classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'Natural Language :: English',
@@ -126,7 +127,7 @@ setup(
         'Topic :: Multimedia :: Video',
         'Topic :: Multimedia :: Video :: Capture',
         'Topic :: Multimedia :: Video :: Conversion',
-    ),
+    ],
     keywords='video editing audio compositing ffmpeg',
     packages=find_packages(exclude='docs'),
     cmdclass=cmdclass,
